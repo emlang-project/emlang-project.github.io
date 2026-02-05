@@ -239,6 +239,25 @@
             font-weight: 600;
             margin-bottom: 1rem;
             color: var(--violet-6);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .open-in-editor {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+            background: var(--violet-6);
+            border-radius: 4px;
+            padding: 0.3rem 0.7rem;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .open-in-editor:hover {
+            background: var(--violet-7);
         }
 
         /* Code blocks with copy button */
@@ -491,7 +510,7 @@
             <h2>Examples</h2>
             <div class="carousel">
                 <div class="carousel-item active">
-                    <div class="carousel-title">User Registration with Test</div>
+                    <div class="carousel-title">User Registration with Test <a class="open-in-editor" href="#">Try it live</a></div>
                     <div class="code-wrapper">
                         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                         <pre><code><span class="hljs-attr">slices:</span>
@@ -524,7 +543,7 @@
                 </div>
 
                 <div class="carousel-item">
-                    <div class="carousel-title">Invoice Generation</div>
+                    <div class="carousel-title">Invoice Generation <a class="open-in-editor" href="#">Try it live</a></div>
                     <div class="code-wrapper">
                         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                         <pre><code><span class="hljs-attr">slices:</span>
@@ -546,7 +565,7 @@
                 </div>
 
                 <div class="carousel-item">
-                    <div class="carousel-title">Exploratory Brainstorming - Order Flow</div>
+                    <div class="carousel-title">Exploratory Brainstorming - Order Flow <a class="open-in-editor" href="#">Try it live</a></div>
                     <div class="code-wrapper">
                         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                         <pre><code><span class="hljs-attr">slices:</span>
@@ -663,6 +682,16 @@ emlang diagram model.yaml -o diagram.html
             nav.classList.toggle('scrolled', !entry.isIntersecting);
         }, { threshold: 0, rootMargin: '-86px 0px 0px 0px' });
         observer.observe(header);
+
+        // Set "Try it live" links
+        document.querySelectorAll('.carousel-item').forEach(item => {
+            const code = item.querySelector('code');
+            const link = item.querySelector('.open-in-editor');
+            if (code && link) {
+                link.href = 'repl.html?s=' + encodeURIComponent(code.textContent);
+                link.target = '_blank';
+            }
+        });
 
         // Keyboard navigation for carousel
         document.addEventListener('keydown', (e) => {
