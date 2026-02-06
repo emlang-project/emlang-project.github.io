@@ -16,71 +16,10 @@
     <meta name="twitter:title" content="Emlang - Event Modeling Language">
     <meta name="twitter:description" content="Event Modeling in YAML. A text-based DSL for Event Modeling.">
     <meta name="twitter:image" content="https://emlang-project.github.io/logo.png">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        /* Open Colors */
-        :root {
-            --violet-6: #7048e8;
-            --violet-7: #5f3dc4;
-            --orange-6: #f59f00;
-            --orange-7: #e67700;
-            --gray-0: #f8f9fa;
-            --gray-1: #f1f3f5;
-            --gray-3: #dee2e6;
-            --gray-5: #adb5bd;
-            --gray-7: #495057;
-            --gray-9: #212529;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            scroll-padding-top: 60px;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: var(--gray-9);
-            background: white;
-        }
-
-        /* Nav */
-        nav {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: white;
-            border-bottom: 1px solid var(--gray-3);
-        }
-
-        .nav-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 56px;
-        }
-
-        .nav-logo {
-            font-weight: 800;
-            font-size: 1.25rem;
-            text-decoration: none;
-            color: var(--gray-9);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
+        /* Nav logo animation (homepage only) */
         .nav-logo-img {
-            height: 28px;
-            width: auto;
             width: 0;
             opacity: 0;
             overflow: hidden;
@@ -90,49 +29,6 @@
         nav.scrolled .nav-logo-img {
             width: 28px;
             opacity: 1;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--gray-7);
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover {
-            color: var(--violet-6);
-        }
-
-        .nav-github {
-            display: flex;
-            align-items: center;
-        }
-
-        .nav-toggle {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-
-        .nav-toggle svg {
-            width: 24px;
-            height: 24px;
-            stroke: var(--gray-7);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
         }
 
         /* Header */
@@ -198,23 +94,19 @@
             background: var(--gray-0);
         }
 
-        /* Sections */
+        /* Sections (homepage overrides) */
         section {
             padding: 4rem 0;
+            border-bottom: none;
         }
 
         section h2 {
             font-size: 2rem;
-            font-weight: 700;
             margin-bottom: 1.5rem;
-            color: var(--gray-9);
         }
 
         section p {
             font-size: 1.125rem;
-            color: var(--gray-7);
-            margin-bottom: 1rem;
-            max-width: 800px;
         }
 
         /* Carousel */
@@ -260,49 +152,8 @@
             background: var(--violet-7);
         }
 
-        /* Code blocks with copy button */
-        .code-wrapper {
-            position: relative;
-        }
-
-        .copy-btn {
-            position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
-            background: rgba(255, 255, 255, 0.15);
-            color: var(--gray-5);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-            padding: 0.25rem 0.5rem;
-            font-size: 0.75rem;
-            cursor: pointer;
-            opacity: 0;
-            transition: opacity 0.2s;
-            font-family: inherit;
-        }
-
-        .code-wrapper:hover .copy-btn,
-        .install-wrapper:hover .copy-btn {
-            opacity: 1;
-        }
-
-        .copy-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            color: white;
-        }
-
         .install-wrapper {
             position: relative;
-        }
-
-        pre {
-            background: var(--gray-9);
-            color: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 6px;
-            overflow-x: auto;
-            font-size: 0.9rem;
-            line-height: 1.5;
         }
 
         .carousel-nav {
@@ -371,34 +222,16 @@
         }
 
         .use-cases li:before {
-            content: "→";
+            content: "\2192";
             position: absolute;
             left: 0;
             color: var(--orange-6);
             font-weight: 700;
         }
 
-        /* Footer */
+        /* Footer (homepage override) */
         footer {
-            padding: 3rem 0;
-            background: var(--gray-0);
-            border-top: 1px solid var(--gray-3);
-            text-align: center;
             margin-top: 4rem;
-        }
-
-        footer p {
-            color: var(--gray-7);
-            margin: 0.5rem 0;
-        }
-
-        footer a {
-            color: var(--violet-6);
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
         }
 
         .badges {
@@ -412,13 +245,7 @@
             height: 20px;
         }
 
-        /* Syntax Highlighting */
-        .hljs-attr { color: #82aaff; }
-        .hljs-string { color: #c3e88d; }
-        .hljs-number { color: #f78c6c; }
-        .hljs-comment { color: var(--gray-5); font-style: italic; }
-
-        /* Responsive */
+        /* Responsive (homepage overrides) */
         @media (max-width: 768px) {
             h1 {
                 font-size: 2rem;
@@ -435,27 +262,6 @@
             .cta-buttons {
                 flex-direction: column;
                 align-items: stretch;
-            }
-
-            .nav-toggle {
-                display: block;
-            }
-
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 56px;
-                left: 0;
-                right: 0;
-                background: white;
-                flex-direction: column;
-                padding: 1rem 2rem;
-                border-bottom: 1px solid var(--gray-3);
-                gap: 0.75rem;
-            }
-
-            .nav-links.open {
-                display: flex;
             }
         }
     </style>
@@ -500,7 +306,7 @@
     <section id="what-is-emlang">
         <div class="container">
             <h2>What is Emlang?</h2>
-            <p>Emlang is a text-based DSL for Event Modeling that lets you write event models in YAML. It's also a complete toolchain that validates syntax and generates HTML diagrams.</p>
+            <p>Emlang is a <a href="spec.html" style="color: var(--violet-6); font-weight: 500;">text-based DSL</a> for Event Modeling that lets you write event models in YAML. It's also a complete <a href="cli.html" style="color: var(--violet-6); font-weight: 500;">toolchain</a> that validates syntax and generates HTML diagrams.</p>
             <p>Event Modeling traditionally uses walls and visual tools for collaborative workshops. Emlang complements these practices by letting you maintain models as code—useful for documenting existing systems, writing normalized specs, or when text-based workflows fit better. See the <a href="spec.html" style="color: var(--violet-6); font-weight: 500;">language specification</a> for the full syntax.</p>
         </div>
     </section>
