@@ -36,6 +36,7 @@ jobs:
         run: |
           mkdir public
           cp *.html public/
+          cp *.css public/
           cp favicon.ico public/
           cp logo.png public/
           cp logo.svg public/
