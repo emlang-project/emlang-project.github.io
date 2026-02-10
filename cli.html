@@ -308,14 +308,14 @@ emlang -c custom-config.yaml lint model.yaml</code></pre>
                         <tr>
                             <td><code>--keys</code></td>
                             <td>string</td>
-                            <td><code>long</code></td>
+                            <td><code>short</code></td>
                             <td>Key style: <code>long</code> (<code>trigger</code>, <code>command</code>, <code>event</code>, <code>exception</code>, <code>view</code>) or <code>short</code> (<code>t</code>, <code>c</code>, <code>e</code>, <code>x</code>, <code>v</code>)</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <p>The <code>--keys</code> flag priority is: flag &gt; <a href="config.html#fmt" style="color: var(--violet-6);">config</a> &gt; default (<code>long</code>).</p>
+            <p>The <code>--keys</code> flag priority is: flag &gt; <a href="config.html#fmt" style="color: var(--violet-6);">config</a> &gt; default (<code>short</code>).</p>
 
             <h3>Examples</h3>
             <div class="code-wrapper">
@@ -326,8 +326,8 @@ emlang fmt model.yaml
 <span class="hljs-comment"># Format in-place</span>
 emlang fmt -w model.yaml
 
-<span class="hljs-comment"># Format with short keys</span>
-emlang fmt --keys short model.yaml
+<span class="hljs-comment"># Format with long keys</span>
+emlang fmt --keys long model.yaml
 
 <span class="hljs-comment"># Format from stdin</span>
 cat model.yaml | emlang fmt -</code></pre>
