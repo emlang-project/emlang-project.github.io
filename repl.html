@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>emlang REPL</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/monokai.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/yaml/yaml.min.js"></script>
 <script src="wasm_exec.js"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -99,18 +103,11 @@ header button:hover { background: #868e96; }
   flex-shrink: 0;
 }
 
-textarea {
+.editor-pane .CodeMirror {
   flex: 1;
-  padding: 1rem;
-  background: #343a40;
-  color: #f1f3f5;
-  border: none;
-  resize: none;
-  font-family: monospace;
+  height: auto;
   font-size: 0.9rem;
   line-height: 1.5;
-  tab-size: 2;
-  outline: none;
 }
 
 .preview-header {
@@ -241,7 +238,7 @@ textarea {
 <div class="main">
   <div class="editor-pane">
     <label>YAML source</label>
-    <textarea id="editor" spellcheck="false" autocomplete="off"></textarea>
+    <textarea id="editor"></textarea>
   </div>
   <div class="resize-handle" id="resize-handle"></div>
   <div class="preview-pane">
@@ -265,7 +262,17 @@ textarea {
 </div>
 
 <script>
-var editor = document.getElementById("editor");
+var cm = CodeMirror.fromTextArea(document.getElementById("editor"), {
+  mode: "yaml",
+  theme: "monokai",
+  lineNumbers: true,
+  tabSize: 2,
+  indentWithTabs: false,
+  extraKeys: {
+    "Ctrl-Shift-F": function() { formatSource(); }
+  }
+});
+
 var preview = document.getElementById("preview");
 var consoleBody = document.getElementById("console-body");
 var badge = document.getElementById("badge");
@@ -339,7 +346,7 @@ function handleRenderResult(data) {
 
 function render() {
   if (!backend) return;
-  var src = editor.value;
+  var src = cm.getValue();
   if (!src.trim()) {
     preview.srcdoc = "";
     clearConsole();
@@ -355,37 +362,22 @@ function scheduleRender() {
 
 function formatSource() {
   if (!backend) return;
-  backend.format(editor.value).then(function(data) {
+  backend.format(cm.getValue()).then(function(data) {
     if (data.error) {
       clearConsole();
       appendMsg("msg-error", "Format error: " + data.error);
       updateBadge(1, 0);
     } else {
-      editor.value = data.yaml;
-      localStorage.setItem("emlang-repl-src", editor.value);
+      cm.setValue(data.yaml);
+      localStorage.setItem("emlang-repl-src", data.yaml);
       render();
     }
   });
 }
 
-editor.addEventListener("input", function() {
-  localStorage.setItem("emlang-repl-src", editor.value);
+cm.on("change", function() {
+  localStorage.setItem("emlang-repl-src", cm.getValue());
   scheduleRender();
-});
-
-editor.addEventListener("keydown", function(e) {
-  if (e.key === "Tab") {
-    e.preventDefault();
-    var start = this.selectionStart;
-    var end = this.selectionEnd;
-    this.value = this.value.substring(0, start) + "  " + this.value.substring(end);
-    this.selectionStart = this.selectionEnd = start + 2;
-    scheduleRender();
-  }
-  if (e.key === "F" && e.ctrlKey && e.shiftKey) {
-    e.preventDefault();
-    formatSource();
-  }
 });
 
 btnFmt.addEventListener("click", formatSource);
@@ -455,7 +447,7 @@ window.onEmlangReady = function() {
   clearConsole();
   var params = new URLSearchParams(window.location.search);
   var s = params.get("s");
-  editor.value = s ? s : (localStorage.getItem("emlang-repl-src") || "slices:\n");
+  cm.setValue(s ? s : (localStorage.getItem("emlang-repl-src") || "slices:\n"));
   render();
 };
 
