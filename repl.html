@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emlang Editor</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-color/1.9.1/open-color.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/fold/foldgutter.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/yaml/yaml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/fold/foldcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/fold/foldgutter.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/fold/indent-fold.min.js"></script>
@@ -230,6 +230,17 @@ header button:hover { background: #5f3dc4; border-color: #5f3dc4; }
 .msg-error { color: #c92a2a; }
 .msg-warning { color: #e67700; }
 .msg-info { color: #7048e8; }
+
+.cm-em-comment { color: var(--oc-gray-4); }
+.cm-em-key { color: var(--oc-gray-9); }
+.cm-em-name { color: var(--oc-gray-9); font-weight: bold; }
+.cm-em-trigger { color: var(--oc-gray-6); font-weight: bold; }
+.cm-em-command { color: var(--oc-blue-8); font-weight: bold; }
+.cm-em-event { color: var(--oc-yellow-8); font-weight: bold; }
+.cm-em-view { color: var(--oc-green-8); font-weight: bold; }
+.cm-em-exception { color: var(--oc-red-8); font-weight: bold; }
+.cm-em-propkey { color: var(--oc-gray-9); font-size: 0.75em; }
+.cm-em-propval { color: var(--oc-gray-6); font-size: 0.75em; }
 </style>
 </head>
 <body>
@@ -268,15 +279,69 @@ header button:hover { background: #5f3dc4; border-color: #5f3dc4; }
 </div>
 
 <script>
+CodeMirror.defineMode("emlang", function() {
+  var stepKeys = {
+    c: "em-command", cmd: "em-command", command: "em-command",
+    e: "em-event", evt: "em-event", event: "em-event",
+    v: "em-view", view: "em-view",
+    t: "em-trigger", trg: "em-trigger", trigger: "em-trigger",
+    x: "em-exception", err: "em-exception", exception: "em-exception"
+  };
+  var stepKeyPattern = /^(command|exception|trigger|event|view|cmd|evt|trg|err|c|e|v|x|t):\s*/;
+  var structKeyPattern = /^(slices|steps|tests|props|given|when|then):/;
+
+  return {
+    startState: function() {
+      return { afterDash: false, readingValue: false, valueType: null };
+    },
+    copyState: function(s) {
+      return { afterDash: s.afterDash, readingValue: s.readingValue, valueType: s.valueType };
+    },
+    token: function(stream, state) {
+      if (stream.sol()) {
+        state.afterDash = false;
+        state.readingValue = false;
+        state.valueType = null;
+      }
+      if (stream.eatSpace()) return null;
+      if (stream.peek() === "#") { stream.skipToEnd(); return "em-comment"; }
+      if (state.readingValue) {
+        if (stream.match(/^[^#]+/)) { var t = state.valueType; state.readingValue = false; return t; }
+        state.readingValue = false;
+      }
+      if (state.afterDash) {
+        state.afterDash = false;
+        var m = stream.match(stepKeyPattern);
+        if (m) { state.valueType = stepKeys[m[1]]; state.readingValue = true; return "em-key"; }
+        stream.match(/^[^#]*/);
+        return null;
+      }
+      if (stream.match(/^-\s/)) { state.afterDash = true; return null; }
+      if (stream.match(/^props:/)) return "em-propkey";
+      if (stream.match(structKeyPattern)) return "em-key";
+      if (stream.match(/^[^:#]+:/)) {
+        var rest = stream.string.slice(stream.pos);
+        if (/^\s*(#.*)?$/.test(rest)) return "em-name";
+        state.readingValue = true;
+        state.valueType = "em-propval";
+        return "em-propkey";
+      }
+      stream.next();
+      return null;
+    },
+  };
+});
+
 var cm = CodeMirror.fromTextArea(document.getElementById("editor"), {
-  mode: "yaml",
+  mode: "emlang",
   lineNumbers: true,
   tabSize: 2,
   indentWithTabs: false,
-  foldGutter: true,
+  foldGutter: { rangeFinder: CodeMirror.fold.indent },
   gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
   extraKeys: {
-    "Ctrl-Shift-F": function() { formatSource(); }
+    "Ctrl-Shift-F": function() { formatSource(); },
+    "Tab": function(cm) { cm.replaceSelection("  "); }
   }
 });
 

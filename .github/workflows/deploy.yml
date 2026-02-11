@@ -37,12 +37,12 @@ jobs:
           mkdir public
           cp *.html public/
           cp *.css public/
+          cp *.js public/
           cp favicon.ico public/
           cp logo.png public/
           cp logo.svg public/
           cp /tmp/emlang/bin/*.wasm public/
           cp /tmp/emlang/bin/*.wasm.gz public/
-          cp /tmp/emlang/bin/wasm_exec.js public/
 
       - uses: actions/configure-pages@v5
 
