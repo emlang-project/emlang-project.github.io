@@ -234,17 +234,6 @@
             margin-top: 4rem;
         }
 
-        .badges {
-            display: flex;
-            gap: 0.75rem;
-            justify-content: center;
-            margin-top: 1rem;
-        }
-
-        .badges img {
-            height: 20px;
-        }
-
         /* Responsive (homepage overrides) */
         @media (max-width: 768px) {
             h1 {
@@ -269,7 +258,7 @@
 <body>
     <nav>
         <div class="nav-inner">
-            <a href="#" class="nav-logo"><img src="logo.svg" alt="Emlang" class="nav-logo-img"> The Emlang Project</a>
+            <a href="#" class="nav-logo"><img src="logo.svg" alt="Emlang" class="nav-logo-img"> The Emlang Project</a> <a href="https://github.com/emlang-project/emlang/releases/latest" class="nav-version">v1.2.0</a>
             <button class="nav-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.nav-links').classList.toggle('open')">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
             </button>
@@ -320,6 +309,8 @@
                     <div class="code-wrapper">
                         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                         <pre><code><span class="hljs-attr">slices:</span>
+  <span class="hljs-comment"># A customer creates an **account**.</span>
+  <span class="hljs-comment"># This comment shows in the diagram.</span>
   <span class="hljs-attr">User registration:</span>
     <span class="hljs-attr">steps:</span>
       - <span class="hljs-attr">t:</span> <span class="hljs-string">Customer / Registration form</span>     <span class="hljs-comment"># trigger on the Customer swimlane</span>
@@ -334,6 +325,7 @@
           <span class="hljs-attr">registeredAt:</span> <span class="hljs-string">datetime</span>
       - <span class="hljs-attr">v:</span> <span class="hljs-string">User profile</span>                     <span class="hljs-comment"># view (read model)</span>
     <span class="hljs-attr">tests:</span>
+      <span class="hljs-comment"># The email is checked *before* the account is created.</span>
       <span class="hljs-attr">Email must be unique:</span>                 <span class="hljs-comment"># Given-When-Then test</span>
         <span class="hljs-attr">given:</span>
           - <span class="hljs-attr">e:</span> <span class="hljs-string">User / User registered</span>
@@ -440,10 +432,6 @@ emlang diagram model.yaml -o diagram.html
             <p><strong>Emlang</strong> - Event Modeling Language</p>
             <p><a href="https://github.com/emlang-project">GitHub: emlang-project</a></p>
             <p>MIT License</p>
-            <div class="badges">
-                <a href="https://github.com/emlang-project/emlang"><img src="https://img.shields.io/github/v/release/emlang-project/emlang?label=emlang" alt="emlang release"></a>
-                <a href="https://github.com/emlang-project/spec"><img src="https://img.shields.io/github/v/release/emlang-project/spec?label=spec" alt="spec release"></a>
-            </div>
         </div>
     </footer>
 

@@ -12,7 +12,7 @@
 <body>
     <nav>
         <div class="nav-inner">
-            <a href="index.html" class="nav-logo"><img src="logo.svg" alt="Emlang" class="nav-logo-img"> The Emlang Project</a>
+            <a href="index.html" class="nav-logo"><img src="logo.svg" alt="Emlang" class="nav-logo-img"> The Emlang Project</a> <a href="https://github.com/emlang-project/emlang/releases/latest" class="nav-version">v1.2.0</a>
             <button class="nav-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.nav-links').classList.toggle('open')">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
             </button>
@@ -315,7 +315,9 @@
             <p>Standard YAML comments (<code>#</code>) may be used anywhere.</p>
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                <pre><code><span class="hljs-attr">slices:</span>
+                <pre><code><span class="hljs-comment"># Order flow of the online shop</span>
+<span class="hljs-attr">slices:</span>
+  <span class="hljs-comment"># The customer buys a product from its page.</span>
   <span class="hljs-attr">OrderPlacement:</span>
     - <span class="hljs-attr">t:</span> <span class="hljs-string">Customer/ProductPage</span>    <span class="hljs-comment"># User clicks "Buy Now"</span>
     - <span class="hljs-attr">c:</span> <span class="hljs-string">PlaceOrder</span>              <span class="hljs-comment"># Validates inventory</span>
